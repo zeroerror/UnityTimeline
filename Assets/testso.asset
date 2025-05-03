@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a7f4c09fa8dbc84da3df51144f08819, type: 3}
+  m_Name: testso
+  m_EditorClassIdentifier: 
+  animClip: {fileID: 7400000, guid: 0c56fcde1cd0908499fa108c0f9d287f, type: 2}
+  timeline:
+    tracks:
+    - trackName: Track 0
+      trackIndex: 0
+      length: 0
+      time: 0
+      lastTime: 0
+      fragments:
+      - startTime: 0.1
+        endTime: 0.1666
+      - startTime: 0.3333
+        endTime: 0.5
+    - trackName: Track 1
+      trackIndex: 1
+      length: 0
+      time: 0
+      lastTime: 0
+      fragments:
+      - startTime: 0.7
+        endTime: 0.8666
+      - startTime: 1.0333
+        endTime: 1.2
+    - trackName: Track 2
+      trackIndex: 2
+      length: 0
+      time: 0
+      lastTime: 0
+      fragments:
+      - startTime: 1.4
+        endTime: 1.5666
+      - startTime: 1.7333
+        endTime: 1.9
+    - trackName: Track 3
+      trackIndex: 3
+      length: 0
+      time: 0
+      lastTime: 0
+      fragments:
+      - startTime: 2.1
+        endTime: 2.2666
+      - startTime: 2.4333
+        endTime: 2.6
+    length: 0
+    time: 0
+    frameRate: 30
