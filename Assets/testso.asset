@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a7f4c09fa8dbc84da3df51144f08819, type: 3}
+  m_Script: {fileID: 11500000, guid: 94d45514e4de54e4e98669d10ceb1d0c, type: 3}
   m_Name: testso
   m_EditorClassIdentifier: 
   animClip: {fileID: 7400000, guid: 0c56fcde1cd0908499fa108c0f9d287f, type: 2}
   timeline:
     tracks:
-    - trackName: Track 0
+    - trackName: "\u7279\u6548"
       trackIndex: 0
-      length: 0
+      length: 2.1666667
       time: 0
       lastTime: 0
       fragments:
@@ -25,36 +25,32 @@ MonoBehaviour:
         endTime: 0.1666
       - startTime: 0.3333
         endTime: 0.5
-    - trackName: Track 1
+    - trackName: "\u884C\u4E3A"
       trackIndex: 1
-      length: 0
+      length: 2.1666667
       time: 0
       lastTime: 0
       fragments:
-      - startTime: 0.7
-        endTime: 0.8666
-      - startTime: 1.0333
-        endTime: 1.2
-    - trackName: Track 2
+      - startTime: 0.2
+        endTime: 0.3
+      - startTime: 0.4
+        endTime: 0.5
+    - trackName: "\u65F6\u95F4\u7F29\u653E"
       trackIndex: 2
-      length: 0
+      length: 2.1666667
       time: 0
       lastTime: 0
       fragments:
-      - startTime: 1.4
-        endTime: 1.5666
-      - startTime: 1.7333
-        endTime: 1.9
-    - trackName: Track 3
+      - startTime: 0.3
+        endTime: 1.5
+    - trackName: "\u65F6\u95F4\u5FAA\u73AF"
       trackIndex: 3
-      length: 0
+      length: 2.1666667
       time: 0
       lastTime: 0
       fragments:
-      - startTime: 2.1
-        endTime: 2.2666
-      - startTime: 2.4333
-        endTime: 2.6
-    length: 0
-    time: 0
+      - startTime: 1.6
+        endTime: 1.9
+    length: 2.1666667
+    time: 1.4560001
     frameRate: 30

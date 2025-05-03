@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.GameEditor
 {
-    [CustomEditor(typeof(GameSO))]
+    [CustomEditor(typeof(GameSampleSO))]
     public class GameSOEditor : Editor
     {
         private SerializedObject _serializedObject;
@@ -44,17 +44,15 @@ namespace Game.GameEditor
             this._serializedObject.ApplyModifiedProperties();
 
             {
-                var gameSO = (GameSO)target;
+                var gameSO = (GameSampleSO)target;
                 var animClip = gameSO.animClip;
                 var animLength = animClip != null ? animClip.length : 0;
                 var timeline = gameSO.timeline;
                 timeline.length = animLength;
                 var tracks = new List<GameTimelineTrack>();
                 timeline.tracks = tracks;
-                var track0 = new GameTimelineTrack
+                var track0 = new GameTimelineTrack_Effect
                 {
-                    trackIndex = 0,
-                    trackName = "Track 0",
                     length = animLength,
                     fragments = new List<GameTimelineTrackFragment>{
                             new GameTimelineTrackFragment{
@@ -67,10 +65,8 @@ namespace Game.GameEditor
                             },
                         }
                 };
-                var track1 = new GameTimelineTrack
+                var track1 = new GameTimelineTrack_Action
                 {
-                    trackIndex = 1,
-                    trackName = "Track 1",
                     length = animLength,
                     fragments = new List<GameTimelineTrackFragment>{
                             new GameTimelineTrackFragment{
@@ -83,25 +79,30 @@ namespace Game.GameEditor
                             },
                         }
                 };
-                var track2 = new GameTimelineTrack
+                var track2 = new GameTimelineTrack_TimeScale
                 {
-                    trackIndex = 2,
-                    trackName = "Track 2",
                     length = animLength,
                     fragments = new List<GameTimelineTrackFragment>{
                             new GameTimelineTrackFragment{
-                                startTime = 0.7f,
-                                endTime = 0.8f,
+                                startTime = 0.3f,
+                                endTime = 1.5f,
                             },
+                        }
+                };
+                var track3 = new GameTimelineTrack_Loop
+                {
+                    length = animLength,
+                    fragments = new List<GameTimelineTrackFragment>{
                             new GameTimelineTrackFragment{
-                                startTime = 1.4f,
-                                endTime = 2.1f,
+                                startTime = 1.6f,
+                                endTime = 1.9f,
                             },
                         }
                 };
                 tracks.Add(track0);
                 tracks.Add(track1);
                 tracks.Add(track2);
+                tracks.Add(track3);
             }
 
         }
