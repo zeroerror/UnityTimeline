@@ -17,9 +17,10 @@ namespace Game.GameEditor
         public const float bgPadding_Hor = 10;
         public const float bgPadding_Ver = 10;
         Color bgColor = new Color(25 / 255.0f, 25 / 255.0f, 25 / 255.0f);
-        Color trackColor = new Color(42 / 255.0f, 42 / 255.0f, 42 / 255.0f, 1);
         Color textColor = new Color(0.0f, 0.5f, 0.5f);
         Color transparentColor = new Color(1.0f, 0.0f, 0.0f, 0.0f);
+        Color trackColor = new Color(42 / 255.0f, 42 / 255.0f, 42 / 255.0f, 1);
+        Color trackLineColor = new Color(0.5f, 0.5f, 0.5f, 1);
 
         float bgWidth = labelW + trackW + bgPadding_Hor * 2;
         float GetBgHeight(int trackCount) => (trackCount + 1) * rowPadding + bgPadding_Ver * 2;
@@ -53,7 +54,7 @@ namespace Game.GameEditor
             // 绘制时间
             var totalFrame = length * frameRate;
             var time = time_p.floatValue;
-            var frame = Mathf.RoundToInt(time * frameRate);
+            var frame = Mathf.FloorToInt(time * frameRate);
             var timeStr = $"{frame} / {totalFrame}";
             this._editorLayout.AddAnchorOffset(labelW, 0);
             this._editorLayout.AddAnchorOffset(-50, 0);
@@ -61,19 +62,41 @@ namespace Game.GameEditor
             // 绘制箭头轨道
             this._editorLayout.AddAnchorOffset(50, 0);
             this._editorLayout.AddRow(0, trackW, trackH, trackColor);
-            _OnDragArrowTrack(property);
             var arrowRect = this._editorLayout.GetRect(15, 15);
             arrowRect.x -= 7.5f;
             arrowRect.y -= 7.5f;
             arrowRect.x += time / length * trackW;
             this._editorLayout.DrawArrow(arrowRect, Color.white);
-            this._editorLayout.AddAnchorOffset(-labelW, rowPadding);
+            // 绘制箭头轨道分割线
+            _DrawTrackLine(property, trackW, trackH, trackLineColor);
+            // 箭头拖拽
+            _OnDragArrowTrack(property);
 
             // 绘制轨道
+            this._editorLayout.AddAnchorOffset(-labelW, rowPadding);
             for (int i = 0; i < tracks_p.arraySize; i++)
             {
                 var track_p = tracks_p.GetArrayElementAtIndex(i);
                 EditorGUILayout.PropertyField(track_p);
+            }
+
+            // 垂直时间线 
+            var x = bgRect.x + bgPadding_Hor + labelW + time / length * trackW;
+            var lineRect = new Rect(x, bgRect.y + bgPadding_Ver, 1, bgHeight - bgPadding_Ver * 2);
+            this._editorLayout.DrawTextureRect(lineRect, Color.white);
+        }
+
+        private void _DrawTrackLine(SerializedProperty property, float trackW, float trackH, Color color)
+        {
+            var length = property.FindPropertyRelative("length").floatValue;
+            var frameRate = property.FindPropertyRelative("frameRate").intValue;
+            var totalFrame = Mathf.FloorToInt(length * frameRate);
+            for (int i = 0; i < totalFrame; i++)
+            {
+                var x = i / (float)totalFrame * trackW;
+                var height = i % 5 == 0 && i > 0 ? trackH * 0.7f : trackH * 0.25f;
+                var lineRect = new Rect(x + this._editorLayout.anchorPos.x, this._editorLayout.anchorPos.y, 1, height);
+                this._editorLayout.DrawTextureRect(lineRect, color);
             }
         }
 
