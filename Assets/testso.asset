@@ -15,44 +15,65 @@ MonoBehaviour:
   animClip: {fileID: 7400000, guid: 0c56fcde1cd0908499fa108c0f9d287f, type: 2}
   timeline:
     tracks:
-    - trackName: "\u7279\u6548"
-      trackIndex: 0
-      length: 2.1666667
-      time: 0.35966668
-      lastTime: 0.35966668
-      fragments:
-      - startTime: 0.1
-        endTime: 0.1666
-      - startTime: 0.3333
-        endTime: 0.5
-    - trackName: "\u884C\u4E3A"
-      trackIndex: 1
-      length: 2.1666667
-      time: 0.35966668
-      lastTime: 0.35966668
-      fragments:
-      - startTime: 0.2
-        endTime: 0.3
-      - startTime: 0.4
-        endTime: 0.5
-    - trackName: "\u65F6\u95F4\u7F29\u653E"
-      trackIndex: 2
-      length: 2.1666667
-      time: 0.35966668
-      lastTime: 0.35966668
-      fragments: []
-    - trackName: "\u65F6\u95F4\u5FAA\u73AF"
-      trackIndex: 3
-      length: 2.1666667
-      time: 0.35966668
-      lastTime: 0.35966668
-      fragments:
-      - startTime: 1.3736668
-        endTime: 1.4736668
-      - startTime: 0.17333333
-        endTime: 0.27333334
-      - startTime: 1.7896667
-        endTime: 1.8896667
+    - rid: 5371023143676411904
+    - rid: 5371023143676411905
+    - rid: 5371023143676411906
+    - rid: 5371023143676411907
     length: 2.1666667
-    time: 0.35966668
+    time: 1.534
     frameRate: 30
+  references:
+    version: 2
+    RefIds:
+    - rid: 5371023143676411904
+      type: {class: GameTimelineTrack_Effect, ns: , asm: Assembly-CSharp}
+      data:
+        trackName: "\u7279\u6548"
+        trackIndex: 0
+        length: 2.1666667
+        time: 1.534
+        lastTime: 1.534
+        fragments:
+        - startTime: 0.1
+          endTime: 0.1666
+        - startTime: 0.3333
+          endTime: 0.5
+        - startTime: 1.2783333
+          endTime: 1.3783333
+    - rid: 5371023143676411905
+      type: {class: GameTimelineTrack_Action, ns: , asm: Assembly-CSharp}
+      data:
+        trackName: "\u884C\u4E3A"
+        trackIndex: 1
+        length: 2.1666667
+        time: 1.534
+        lastTime: 1.534
+        fragments:
+        - startTime: 0.2
+          endTime: 0.3
+        - startTime: 0.4
+          endTime: 0.5
+        - startTime: 1.5296667
+          endTime: 1.6296667
+    - rid: 5371023143676411906
+      type: {class: GameTimelineTrack_TimeScale, ns: , asm: Assembly-CSharp}
+      data:
+        trackName: "\u65F6\u95F4\u7F29\u653E"
+        trackIndex: 2
+        length: 2.1666667
+        time: 1.534
+        lastTime: 1.534
+        fragments:
+        - startTime: 0.3
+          endTime: 1.5
+    - rid: 5371023143676411907
+      type: {class: GameTimelineTrack_Loop, ns: , asm: Assembly-CSharp}
+      data:
+        trackName: "\u65F6\u95F4\u5FAA\u73AF"
+        trackIndex: 3
+        length: 2.1666667
+        time: 1.534
+        lastTime: 1.534
+        fragments:
+        - startTime: 1.6
+          endTime: 1.9

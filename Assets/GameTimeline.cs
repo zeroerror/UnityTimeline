@@ -1,11 +1,13 @@
 
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Game.GameEditor
 {
     [System.Serializable]
     public class GameTimeline
     {
+        [SerializeReference]
         public List<GameTimelineTrack> tracks;
         public float length;
         public float time;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.GameEditor
 {
-    [CustomPropertyDrawer(typeof(GameTimelineTrack))]
+    [CustomPropertyDrawer(typeof(GameTimelineTrack), true)]
     public class GameTimelineTrackPropertyDrawer : GamePropertyDrawer
     {
         // 常量定义
@@ -13,10 +13,10 @@ namespace Game.GameEditor
         const float labelW = 100;
         const float labelLeftPadding = 5;
         const float rowPadding = 27;
-        Color trackColor = new Color(42 / 255.0f, 42 / 255.0f, 42 / 255.0f, 1);
-        Color trackLabelColor = new Color(0.2f, 0.2f, 0.2f, 1);
-        Color textColor = new Color(0.0f, 0.5f, 0.5f);
-        Color fragmentColor = new Color(0.5f, 0.5f, 0.5f, 1);
+        protected virtual Color trackColor => new Color(42 / 255.0f, 42 / 255.0f, 42 / 255.0f, 1);
+        protected virtual Color trackLabelColor => new Color(0.2f, 0.2f, 0.2f, 1);
+        protected virtual Color textColor => new Color(0.0f, 0.5f, 0.5f);
+        protected virtual Color fragmentColor => new Color(0.5f, 0.5f, 0.5f, 1);
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -32,7 +32,7 @@ namespace Game.GameEditor
             this._editorLayout.AddAnchorOffset(labelW, 0);
             var trackIndex = property.FindPropertyRelative("trackIndex").intValue;
             this._editorLayout.AddRow(trackIndex, trackW, trackH, trackColor);
-            _OnCreateFragment(property);
+            _ShowFragmentMenu(property);
             this._editorLayout.AddAnchorOffset(-labelW, rowPadding);
             var fragments_p = property.FindPropertyRelative("fragments");
             for (int j = 0; j < fragments_p.arraySize; j++)
@@ -45,24 +45,24 @@ namespace Game.GameEditor
                 var w = (endTime - startTime) / length * trackW;
                 this._editorLayout.AddColumn(trackIndex, x, w, fragmentH, fragmentColor);
             }
+            _CheckTimeChange(property);
+        }
 
+        private void _CheckTimeChange(SerializedProperty property)
+        {
             var time = property.FindPropertyRelative("time").floatValue;
             var lastTime = property.FindPropertyRelative("lastTime").floatValue;
-            if (time != lastTime)
-            {
-                _OnUpdate(property, time);
-            }
-
-        }
-
-        protected virtual void _OnUpdate(SerializedProperty property, float newTime)
-        {
-            var trackName = property.FindPropertyRelative("trackName").stringValue;
+            if (time == lastTime) return;
             var lastTime_p = property.FindPropertyRelative("lastTime");
-            lastTime_p.floatValue = newTime;
+            lastTime_p.floatValue = time;
+            OnTimeUpdate(property, time, lastTime);
         }
 
-        private void _OnCreateFragment(SerializedProperty property)
+        protected virtual void OnTimeUpdate(SerializedProperty property, float time, float lastTime)
+        {
+        }
+
+        private void _ShowFragmentMenu(SerializedProperty property)
         {
             var eventType = Event.current.type;
             var isRightClick = eventType == EventType.MouseDown && Event.current.button == 1;
@@ -124,7 +124,6 @@ namespace Game.GameEditor
                     property.serializedObject.ApplyModifiedProperties();
                 });
             }
-
 
             menu.ShowAsContext();
         }
