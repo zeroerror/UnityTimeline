@@ -1,11 +1,9 @@
-using System;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 namespace Game.GameEditor
 {
-    [CustomPropertyDrawer(typeof(GameTimeline))]
+    [CustomPropertyDrawer(typeof(GameTimeline), true)]
     public class GameTimelinePropertyDrawer : GamePropertyDrawer
     {
         // 常量定义
@@ -71,7 +69,7 @@ namespace Game.GameEditor
             arrowRect.x += time / length * trackW;
             this._editorLayout.DrawArrow(arrowRect, Color.white);
             // 箭头拖拽
-            _OnDragArrowTrack(property);
+            OnDragArrowTrack(property);
 
             // 绘制轨道
             this._editorLayout.AddAnchorOffset(-labelW, rowPadding);
@@ -101,7 +99,7 @@ namespace Game.GameEditor
             }
         }
 
-        private void _OnDragArrowTrack(SerializedProperty property)
+        private void OnDragArrowTrack(SerializedProperty property)
         {
             Event currentEvent = Event.current;
             var isMouseUp = currentEvent.type == EventType.MouseUp;
@@ -127,16 +125,27 @@ namespace Game.GameEditor
             {
                 var offsetx = currentEvent.mousePosition.x - trackRect.x;
                 var newTime = offsetx / trackW * length;
+                newTime = Mathf.Clamp(newTime, 0, length);
                 time_p.floatValue = newTime;
                 // 更新轨道当前时间
                 var tracks_p = property.FindPropertyRelative("tracks");
                 for (var i = 0; i < tracks_p.arraySize; i++)
                 {
                     var track_p = tracks_p.GetArrayElementAtIndex(i);
-                    track_p.FindPropertyRelative("time").floatValue = newTime;
+                    var trackTime_p = track_p.FindPropertyRelative("time");
+                    var trackTime = trackTime_p.floatValue;
+                    if (trackTime != newTime)
+                    {
+                        trackTime_p.floatValue = newTime;
+                        this._OnTimelineUpdate(property, newTime);
+                    }
                 }
                 Event.current.Use();
             }
+        }
+        protected virtual void _OnTimelineUpdate(SerializedProperty property, float time)
+        {
+            // Override this method to handle timeline time updates
         }
         private bool _isDragging = false;
     }

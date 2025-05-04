@@ -55,6 +55,7 @@ namespace Game.GameEditor
                 var animClip = gameSO.animClip;
                 var animLength = animClip != null ? animClip.length : 0;
                 var timeline = gameSO.timeline;
+                timeline.animClip = animClip;
                 timeline.length = animLength;
                 var tracks = new List<GameTimelineTrack>();
                 timeline.tracks = tracks;

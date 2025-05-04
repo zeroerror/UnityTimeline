@@ -8,7 +8,7 @@ public class GameSampleSO : ScriptableObject
 {
 #if UNITY_EDITOR
     public AnimationClip animClip;
-    public GameTimeline timeline = new GameTimeline();
+    public GameTimeline_Skill timeline = new GameTimeline_Skill();
 #endif
 }
 
