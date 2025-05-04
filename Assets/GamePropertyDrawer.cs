@@ -9,7 +9,8 @@ namespace Game.GameEditor
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return 0;
+            var singleLineHeight = EditorGUIUtility.singleLineHeight;
+            return singleLineHeight;
         }
 
         public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)

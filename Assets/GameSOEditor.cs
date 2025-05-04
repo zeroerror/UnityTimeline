@@ -41,8 +41,15 @@ namespace Game.GameEditor
             this._serializedObject.Update();
             EditorGUILayout.PropertyField(animClip_p);
             EditorGUILayout.PropertyField(timeline_p);
+            if (GUILayout.Button("Create Default"))
+            {
+                _CreateDefault();
+            }
             this._serializedObject.ApplyModifiedProperties();
+        }
 
+        private void _CreateDefault()
+        {
             {
                 var gameSO = (GameSampleSO)target;
                 var animClip = gameSO.animClip;
@@ -104,7 +111,6 @@ namespace Game.GameEditor
                 tracks.Add(track2);
                 tracks.Add(track3);
             }
-
         }
     }
 }

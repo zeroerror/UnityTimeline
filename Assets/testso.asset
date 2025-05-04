@@ -18,8 +18,8 @@ MonoBehaviour:
     - trackName: "\u7279\u6548"
       trackIndex: 0
       length: 2.1666667
-      time: 0
-      lastTime: 0
+      time: 0.35966668
+      lastTime: 0.35966668
       fragments:
       - startTime: 0.1
         endTime: 0.1666
@@ -28,8 +28,8 @@ MonoBehaviour:
     - trackName: "\u884C\u4E3A"
       trackIndex: 1
       length: 2.1666667
-      time: 0
-      lastTime: 0
+      time: 0.35966668
+      lastTime: 0.35966668
       fragments:
       - startTime: 0.2
         endTime: 0.3
@@ -38,19 +38,21 @@ MonoBehaviour:
     - trackName: "\u65F6\u95F4\u7F29\u653E"
       trackIndex: 2
       length: 2.1666667
-      time: 0
-      lastTime: 0
-      fragments:
-      - startTime: 0.3
-        endTime: 1.5
+      time: 0.35966668
+      lastTime: 0.35966668
+      fragments: []
     - trackName: "\u65F6\u95F4\u5FAA\u73AF"
       trackIndex: 3
       length: 2.1666667
-      time: 0
-      lastTime: 0
+      time: 0.35966668
+      lastTime: 0.35966668
       fragments:
-      - startTime: 1.6
-        endTime: 1.9
+      - startTime: 1.3736668
+        endTime: 1.4736668
+      - startTime: 0.17333333
+        endTime: 0.27333334
+      - startTime: 1.7896667
+        endTime: 1.8896667
     length: 2.1666667
-    time: 1.4560001
+    time: 0.35966668
     frameRate: 30
