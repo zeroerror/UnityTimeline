@@ -33,7 +33,6 @@ namespace Game.GameEditor
             var trackIndex = property.FindPropertyRelative("trackIndex").intValue;
             this._editorLayout.AddRow(trackIndex, trackW, trackH, trackColor);
             _ShowFragmentMenu(property);
-            this._editorLayout.AddAnchorOffset(-labelW, rowPadding);
             var fragments_p = property.FindPropertyRelative("fragments");
             for (int j = 0; j < fragments_p.arraySize; j++)
             {
@@ -44,7 +43,10 @@ namespace Game.GameEditor
                 var x = startTime / length * trackW;
                 var w = (endTime - startTime) / length * trackW;
                 this._editorLayout.AddColumn(trackIndex, x, w, fragmentH, fragmentColor);
+                _OnDragFragment(property, fragment_p, x, w);
             }
+            this._editorLayout.AddAnchorOffset(-labelW, rowPadding);
+
             _CheckTimeChange(property);
         }
 
@@ -126,6 +128,59 @@ namespace Game.GameEditor
             }
 
             menu.ShowAsContext();
+            Event.current.Use();
         }
+
+        private void _OnDragFragment(SerializedProperty property, SerializedProperty fragment_p, float offsetX, float width)
+        {
+            var eventType = Event.current.type;
+
+            var isMouseUp = eventType == EventType.MouseUp && Event.current.button == 0;
+            if (isMouseUp && this._dragingFragment != null)
+            {
+                this._dragingFragment = null;
+                return;
+            }
+
+            var isMouseDrag = eventType == EventType.MouseDrag && Event.current.button == 0;
+            if (!isMouseDrag)
+            {
+                return;
+            }
+
+            // 锁定当前拖拽片段
+            if (this._dragingFragment == null)
+            {
+                var fragmentRect = new Rect(offsetX + this._editorLayout.anchorPos.x, this._editorLayout.anchorPos.y, width, fragmentH);
+                var mousePos = Event.current.mousePosition;
+                if (fragmentRect.Contains(mousePos))
+                {
+                    this._dragingFragment = fragment_p;
+                }
+            }
+            if (this._dragingFragment?.propertyPath != fragment_p.propertyPath)
+            {
+                return;
+            }
+
+            var length = property.FindPropertyRelative("length").floatValue;
+            var deltaX = Event.current.delta.x;
+            var deltaTime = deltaX / trackW * length;
+            var startTime_p = fragment_p.FindPropertyRelative("startTime");
+            var startTime = startTime_p.floatValue;
+            var endTime_p = fragment_p.FindPropertyRelative("endTime");
+            var endTime = endTime_p.floatValue;
+            var newStartTime = startTime + deltaTime;
+            var newEndTime = endTime + deltaTime;
+
+            var isOverFlow = newStartTime < 0 || newEndTime > length;
+            if (isOverFlow) return;
+
+            startTime_p.floatValue = newStartTime;
+            endTime_p.floatValue = newEndTime;
+            property.serializedObject.ApplyModifiedProperties();
+            Event.current.Use();
+        }
+        private SerializedProperty _dragingFragment = null;
     }
 }
