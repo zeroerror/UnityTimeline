@@ -13,10 +13,12 @@ namespace Game.GameEditor
         const float labelW = 100;
         const float labelLeftPadding = 5;
         const float rowPadding = 27;
+        const float fragmentBorderPadding = 4;
         protected virtual Color trackColor => new Color(42 / 255.0f, 42 / 255.0f, 42 / 255.0f, 1);
         protected virtual Color trackLabelColor => new Color(0.2f, 0.2f, 0.2f, 1);
         protected virtual Color textColor => new Color(0.0f, 0.5f, 0.5f);
         protected virtual Color fragmentColor => new Color(0.5f, 0.5f, 0.5f, 1);
+        protected virtual Color fragmentBorderColor => new Color(0.0f, 0.5f, 0.5f, 1);
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -26,7 +28,6 @@ namespace Game.GameEditor
         protected override void _OnGUI(Rect rect, SerializedProperty property, GUIContent label)
         {
             this._editorLayout.AddAnchorOffset(GameTimelinePropertyDrawer.bgPadding_Hor, 0);
-
             var trackName = property.FindPropertyRelative("trackName").stringValue;
             this._editorLayout.LabelField(new GUIContent(trackName), labelW, trackH, textColor, trackLabelColor, labelLeftPadding);
             this._editorLayout.AddAnchorOffset(labelW, 0);
@@ -44,6 +45,7 @@ namespace Game.GameEditor
                 var w = (endTime - startTime) / length * trackW;
                 this._editorLayout.AddColumn(trackIndex, x, w, fragmentH, fragmentColor);
                 _OnDragFragment(property, fragment_p, x, w);
+                _OnStretchFragment(property, fragment_p, x, w);
             }
             this._editorLayout.AddAnchorOffset(-labelW, rowPadding);
 
@@ -133,6 +135,7 @@ namespace Game.GameEditor
 
         private void _OnDragFragment(SerializedProperty property, SerializedProperty fragment_p, float offsetX, float width)
         {
+            if (this._stretchingFragment != null) return;
             var eventType = Event.current.type;
 
             var isMouseUp = eventType == EventType.MouseUp && Event.current.button == 0;
@@ -152,6 +155,9 @@ namespace Game.GameEditor
             if (this._dragingFragment == null)
             {
                 var fragmentRect = new Rect(offsetX + this._editorLayout.anchorPos.x, this._editorLayout.anchorPos.y, width, fragmentH);
+                fragmentRect.x += fragmentBorderPadding;
+                fragmentRect.width -= fragmentBorderPadding * 2;
+                fragmentRect.width = Mathf.Max(fragmentRect.width, 0.1f);
                 var mousePos = Event.current.mousePosition;
                 if (fragmentRect.Contains(mousePos))
                 {
@@ -182,5 +188,76 @@ namespace Game.GameEditor
             Event.current.Use();
         }
         private SerializedProperty _dragingFragment = null;
+
+        private void _OnStretchFragment(SerializedProperty property, SerializedProperty fragment_p, float offsetX, float width)
+        {
+            var fragmentRect_l = new Rect(offsetX + this._editorLayout.anchorPos.x, this._editorLayout.anchorPos.y, fragmentBorderPadding, trackH);
+            var fragmentRect_r = new Rect(offsetX + width + this._editorLayout.anchorPos.x - fragmentBorderPadding, this._editorLayout.anchorPos.y, fragmentBorderPadding, trackH);
+            this._editorLayout.DrawTextureRect(fragmentRect_l, fragmentBorderColor);
+            this._editorLayout.DrawTextureRect(fragmentRect_r, fragmentBorderColor);
+
+            if (this._dragingFragment != null) return;
+            var eventType = Event.current.type;
+            var isMouseUp = eventType == EventType.MouseUp && Event.current.button == 0;
+            if (isMouseUp && this._stretchingFragment != null)
+            {
+                this._stretchingFragment = null;
+                this._stretchSide = 0;
+                return;
+            }
+
+            // 锁定当前拉伸片段
+            var isMouseDrag = eventType == EventType.MouseDrag && Event.current.button == 0;
+            if (this._stretchingFragment == null)
+            {
+                if (fragmentRect_l.Contains(Event.current.mousePosition))
+                {
+                    if (isMouseDrag) this._stretchingFragment = fragment_p;
+                    this._stretchSide = 1;
+                }
+                else if (fragmentRect_r.Contains(Event.current.mousePosition))
+                {
+                    if (isMouseDrag) this._stretchingFragment = fragment_p;
+                    this._stretchSide = 2;
+                }
+            }
+
+            var isTarget = this._stretchingFragment?.propertyPath == fragment_p.propertyPath;
+            var isStretching = isMouseDrag && isTarget;
+            var length = property.FindPropertyRelative("length").floatValue;
+            var deltaTime = length * Event.current.delta.x / trackW;
+            var startTime_p = fragment_p.FindPropertyRelative("startTime");
+            var endTime_p = fragment_p.FindPropertyRelative("endTime");
+            switch (this._stretchSide)
+            {
+                case 1:
+                    if (isStretching)
+                    {
+                        var startTime = startTime_p.floatValue;
+                        var newStartTime = startTime + deltaTime;
+                        newStartTime = Mathf.Max(newStartTime, 0);
+                        startTime_p.floatValue = newStartTime;
+                    }
+                    EditorGUIUtility.AddCursorRect(fragmentRect_l, MouseCursor.ResizeHorizontal);
+                    break;
+                case 2:
+                    if (isStretching)
+                    {
+                        var endTime = endTime_p.floatValue;
+                        var newEndTime = endTime + deltaTime;
+                        newEndTime = Mathf.Min(newEndTime, length);
+                        endTime_p.floatValue = newEndTime;
+                    }
+                    EditorGUIUtility.AddCursorRect(fragmentRect_r, MouseCursor.ResizeHorizontal);
+                    break;
+            }
+            if (isStretching)
+            {
+                property.serializedObject.ApplyModifiedProperties();
+                Event.current.Use();
+            }
+        }
+        private SerializedProperty _stretchingFragment;
+        private int _stretchSide;
     }
 }
