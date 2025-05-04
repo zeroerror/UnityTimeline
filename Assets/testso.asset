@@ -15,61 +15,61 @@ MonoBehaviour:
   animClip: {fileID: 7400000, guid: 0c56fcde1cd0908499fa108c0f9d287f, type: 2}
   timeline:
     tracks:
-    - rid: 5371023143676411952
-    - rid: 5371023143676411953
-    - rid: 5371023143676411954
-    - rid: 5371023143676411955
+    - rid: 5371023143676411960
+    - rid: 5371023143676411961
+    - rid: 5371023143676411962
+    - rid: 5371023143676411963
     length: 2.1666667
-    time: 0.51133335
+    time: 0.64133334
     frameRate: 30
   references:
     version: 2
     RefIds:
-    - rid: 5371023143676411952
+    - rid: 5371023143676411960
       type: {class: GameTimelineTrack_Effect, ns: , asm: Assembly-CSharp}
       data:
         trackName: "\u7279\u6548"
         trackIndex: 0
         length: 2.1666667
-        time: 0
-        lastTime: 0
+        time: 0.64133334
+        lastTime: 0.64133334
         fragments:
-        - startTime: 0.1
-          endTime: 0.1666
-        - startTime: 0.5846333
-          endTime: 0.75133336
-    - rid: 5371023143676411953
+        - startTime: 0.40333244
+          endTime: 0.7169313
+        - startTime: 0.9833003
+          endTime: 1.2713333
+    - rid: 5371023143676411961
       type: {class: GameTimelineTrack_Action, ns: , asm: Assembly-CSharp}
       data:
         trackName: "\u884C\u4E3A"
         trackIndex: 1
         length: 2.1666667
-        time: 0
-        lastTime: 0
+        time: 0.64133334
+        lastTime: 0.64133334
         fragments:
-        - startTime: 0.2
-          endTime: 0.3
-        - startTime: 1.1323334
-          endTime: 1.2323333
-    - rid: 5371023143676411954
+        - startTime: 0.8760002
+          endTime: 1.1796672
+        - startTime: 0.48233342
+          endTime: 0.5823336
+    - rid: 5371023143676411962
       type: {class: GameTimelineTrack_TimeScale, ns: , asm: Assembly-CSharp}
       data:
         trackName: "\u65F6\u95F4\u7F29\u653E"
         trackIndex: 2
         length: 2.1666667
-        time: 0
-        lastTime: 0
+        time: 0.64133334
+        lastTime: 0.64133334
         fragments:
-        - startTime: 0.3
-          endTime: 1.5
-    - rid: 5371023143676411955
+        - startTime: 0.03566686
+          endTime: 1.2356672
+    - rid: 5371023143676411963
       type: {class: GameTimelineTrack_Loop, ns: , asm: Assembly-CSharp}
       data:
         trackName: "\u65F6\u95F4\u5FAA\u73AF"
         trackIndex: 3
         length: 2.1666667
-        time: 0
-        lastTime: 0
+        time: 0.64133334
+        lastTime: 0.64133334
         fragments:
-        - startTime: 1.6
-          endTime: 1.9
+        - startTime: 1.1926662
+          endTime: 1.4926661

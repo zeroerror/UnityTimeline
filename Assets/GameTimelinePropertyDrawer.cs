@@ -59,16 +59,17 @@ namespace Game.GameEditor
             this._editorLayout.AddAnchorOffset(labelW, 0);
             this._editorLayout.AddAnchorOffset(-50, 0);
             this._editorLayout.LabelField(new GUIContent(timeStr), 50, trackH, Color.white, transparentColor);
-            // 绘制箭头轨道
             this._editorLayout.AddAnchorOffset(50, 0);
+            // 绘制箭头轨道
             this._editorLayout.AddRow(0, trackW, trackH, trackColor);
+            // 绘制箭头轨道分割线
+            _DrawTrackLine(property, trackW, trackH, trackLineColor);
+            // 绘制箭头
             var arrowRect = this._editorLayout.GetRect(15, 15);
             arrowRect.x -= 7.5f;
             arrowRect.y -= 7.5f;
             arrowRect.x += time / length * trackW;
             this._editorLayout.DrawArrow(arrowRect, Color.white);
-            // 绘制箭头轨道分割线
-            _DrawTrackLine(property, trackW, trackH, trackLineColor);
             // 箭头拖拽
             _OnDragArrowTrack(property);
 
@@ -102,12 +103,27 @@ namespace Game.GameEditor
 
         private void _OnDragArrowTrack(SerializedProperty property)
         {
+            Event currentEvent = Event.current;
+            var isMouseUp = currentEvent.type == EventType.MouseUp;
+            if (this._isDragging && isMouseUp)
+            {
+                this._isDragging = false;
+                return;
+            }
+
             var time_p = property.FindPropertyRelative("time");
             var length_p = property.FindPropertyRelative("length");
             var length = length_p.floatValue;
             var trackRect = this._editorLayout.GetRect(trackW, trackH);
-            Event currentEvent = Event.current;
-            if (new[] { EventType.MouseDrag, EventType.MouseDown }.Contains(currentEvent.type) && trackRect.Contains(currentEvent.mousePosition))
+            var isMouseDown = currentEvent.type == EventType.MouseDown;
+            var isMouseDrag = currentEvent.type == EventType.MouseDrag;
+            var isContains = trackRect.Contains(currentEvent.mousePosition);
+            if (isMouseDown && isContains)
+            {
+                this._isDragging = true;
+            }
+
+            if ((isMouseDown || isMouseDrag) && this._isDragging)
             {
                 var offsetx = currentEvent.mousePosition.x - trackRect.x;
                 var newTime = offsetx / trackW * length;
@@ -119,7 +135,9 @@ namespace Game.GameEditor
                     var track_p = tracks_p.GetArrayElementAtIndex(i);
                     track_p.FindPropertyRelative("time").floatValue = newTime;
                 }
+                Event.current.Use();
             }
         }
+        private bool _isDragging = false;
     }
 }
