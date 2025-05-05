@@ -12,105 +12,107 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0d6949494e212d4f87b31dbcee24769, type: 3}
   m_Name: GameSampleSO
   m_EditorClassIdentifier: 
-  animClip: {fileID: 7400000, guid: fab70fd5a71d22e4096b27f3776f41f3, type: 2}
+  animClip: {fileID: 7400000, guid: 865dc997e603ea54db09989341a89a26, type: 2}
   timeline:
     tracks:
-    - rid: 5371023160645779468
-    - rid: 5371023160645779469
-    - rid: 5371023160645779470
-    - rid: 5371023160645779471
-    length: 1.6333334
-    time: 0
+    - rid: 5371023160645779528
+    - rid: 5371023160645779529
+    - rid: 5371023160645779530
+    - rid: 5371023160645779531
+    length: 0.8333334
+    time: 0.7566695
     frameRate: 30
-    animClip: {fileID: 7400000, guid: fab70fd5a71d22e4096b27f3776f41f3, type: 2}
+    isPlaying: 0
+    simulateSpeed: 0.1
+    animClip: {fileID: 7400000, guid: 865dc997e603ea54db09989341a89a26, type: 2}
   references:
     version: 2
     RefIds:
-    - rid: 5371023160645779468
+    - rid: 5371023160645779528
       type: {class: GameTimelineTrack_Effect, ns: Game.Config, asm: Assembly-CSharp}
       data:
         trackName: "\u7279\u6548"
         trackIndex: 1
-        length: 1.6333334
-        time: 1.6333334
-        lastTime: 1.6333334
+        length: 0.8333334
+        time: 0.8333334
+        lastTime: 0.8333334
         fragments:
-        - startTime: 0.1
-          endTime: 0.1666
-        - startTime: 0.3333
-          endTime: 0.5
+        - startTime: 0.09166667
+          endTime: 0.19166666
         skillTimeline:
           tracks:
-          - rid: 5371023160645779468
-          - rid: 5371023160645779469
-          - rid: 5371023160645779470
-          - rid: 5371023160645779471
-          length: 1.6333334
-          time: 0
+          - rid: 5371023160645779528
+          - rid: 5371023160645779529
+          - rid: 5371023160645779530
+          - rid: 5371023160645779531
+          length: 0.8333334
+          time: 0.5724544
           frameRate: 30
-          animClip: {fileID: 7400000, guid: fab70fd5a71d22e4096b27f3776f41f3, type: 2}
-    - rid: 5371023160645779469
+          isPlaying: 1
+          simulateSpeed: 1
+          animClip: {fileID: 7400000, guid: 865dc997e603ea54db09989341a89a26, type: 2}
+    - rid: 5371023160645779529
       type: {class: GameTimelineTrack_Action, ns: Game.Config, asm: Assembly-CSharp}
       data:
         trackName: "\u52A8\u4F5C"
         trackIndex: 0
-        length: 1.6333334
-        time: 1.6333334
-        lastTime: 1.6333334
+        length: 0.8333334
+        time: 0.8333334
+        lastTime: 0.8333334
         fragments:
-        - startTime: 0.2
-          endTime: 0.3
-        - startTime: 0.4
-          endTime: 0.5
+        - startTime: 0.20833334
+          endTime: 0.30833334
         skillTimeline:
           tracks:
-          - rid: 5371023160645779468
-          - rid: 5371023160645779469
-          - rid: 5371023160645779470
-          - rid: 5371023160645779471
-          length: 1.6333334
-          time: 0
+          - rid: 5371023160645779528
+          - rid: 5371023160645779529
+          - rid: 5371023160645779530
+          - rid: 5371023160645779531
+          length: 0.8333334
+          time: 0.5724544
           frameRate: 30
-          animClip: {fileID: 7400000, guid: fab70fd5a71d22e4096b27f3776f41f3, type: 2}
-    - rid: 5371023160645779470
+          isPlaying: 1
+          simulateSpeed: 1
+          animClip: {fileID: 7400000, guid: 865dc997e603ea54db09989341a89a26, type: 2}
+    - rid: 5371023160645779530
       type: {class: GameTimelineTrack_TimeScale, ns: Game.Config, asm: Assembly-CSharp}
       data:
         trackName: "\u65F6\u95F4\u7F29\u653E"
         trackIndex: 2
-        length: 1.6333334
-        time: 1.6333334
-        lastTime: 1.6333334
-        fragments:
-        - startTime: 0.3
-          endTime: 1.5
+        length: 0.8333334
+        time: 0.8333334
+        lastTime: 0.8333334
+        fragments: []
         skillTimeline:
           tracks:
-          - rid: 5371023160645779468
-          - rid: 5371023160645779469
-          - rid: 5371023160645779470
-          - rid: 5371023160645779471
-          length: 1.6333334
-          time: 0
+          - rid: 5371023160645779528
+          - rid: 5371023160645779529
+          - rid: 5371023160645779530
+          - rid: 5371023160645779531
+          length: 0.8333334
+          time: 0.5724544
           frameRate: 30
-          animClip: {fileID: 7400000, guid: fab70fd5a71d22e4096b27f3776f41f3, type: 2}
-    - rid: 5371023160645779471
+          isPlaying: 1
+          simulateSpeed: 1
+          animClip: {fileID: 7400000, guid: 865dc997e603ea54db09989341a89a26, type: 2}
+    - rid: 5371023160645779531
       type: {class: GameTimelineTrack_Loop, ns: Game.Config, asm: Assembly-CSharp}
       data:
         trackName: "\u65F6\u95F4\u5FAA\u73AF"
         trackIndex: 3
-        length: 1.6333334
-        time: 1.6333334
-        lastTime: 1.6333334
-        fragments:
-        - startTime: 1.6
-          endTime: 1.9
+        length: 0.8333334
+        time: 0.8333334
+        lastTime: 0.8333334
+        fragments: []
         skillTimeline:
           tracks:
-          - rid: 5371023160645779468
-          - rid: 5371023160645779469
-          - rid: 5371023160645779470
-          - rid: 5371023160645779471
-          length: 1.6333334
-          time: 0
+          - rid: 5371023160645779528
+          - rid: 5371023160645779529
+          - rid: 5371023160645779530
+          - rid: 5371023160645779531
+          length: 0.8333334
+          time: 0.5724544
           frameRate: 30
-          animClip: {fileID: 7400000, guid: fab70fd5a71d22e4096b27f3776f41f3, type: 2}
+          isPlaying: 1
+          simulateSpeed: 1
+          animClip: {fileID: 7400000, guid: 865dc997e603ea54db09989341a89a26, type: 2}

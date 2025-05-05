@@ -7,26 +7,25 @@ namespace Game.GameEditor
     [CustomPropertyDrawer(typeof(GameTimeline), true)]
     public class GameTimelinePropertyDrawer : GamePropertyDrawer
     {
-        // 常量定义
-        public const float trackW = 500;
-        public const float trackH = 25;
-        public const float labelW = 100;
-        public const float labelLeftPadding = 5;
-        public const float rowPadding = 27;
-        public const float bgPadding_Hor = 10;
-        public const float bgPadding_Ver = 10;
-        Color bgColor = new Color(25 / 255.0f, 25 / 255.0f, 25 / 255.0f);
-        Color textColor = new Color(0.0f, 0.5f, 0.5f);
-        Color transparentColor = new Color(1.0f, 0.0f, 0.0f, 0.0f);
-        Color trackColor = new Color(42 / 255.0f, 42 / 255.0f, 42 / 255.0f, 1);
-        Color trackLineColor = new Color(0.5f, 0.5f, 0.5f, 1);
+        float trackH => GameTimelineGUIConfig.trackH;
+        float trackW => GameTimelineGUIConfig.trackW;
+        float labelW => GameTimelineGUIConfig.labelW;
+        float labelLeftPadding => GameTimelineGUIConfig.labelLeftPadding;
+        float rowPadding => GameTimelineGUIConfig.rowHeight;
+        float bgPadding_Hor => GameTimelineGUIConfig.bgPadding_Hor;
+        float bgPadding_Ver => GameTimelineGUIConfig.bgPadding_Ver;
+        Color bgColor => GameTimelineGUIConfig.bgColor;
+        Color trackColor => GameTimelineGUIConfig.trackColor;
+        Color trackLineColor => GameTimelineGUIConfig.trackLineColor;
+        Color textColor => GameTimelineGUIConfig.textColor;
+        Color transparentColor => GameTimelineGUIConfig.transparentColor;
+        float bgWidth = GameTimelineGUIConfig.bgWidth;
 
-        float bgWidth = labelW + trackW + bgPadding_Hor * 2;
-        float GetBgHeight(int trackCount) => (trackCount + 1) * rowPadding + bgPadding_Ver * 2;
+        float GetBgHeight(int trackCount) => (trackCount + 2) * rowPadding + bgPadding_Ver * 2;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return trackH + bgPadding_Ver;
+            return trackH * 2 + bgPadding_Ver;
         }
 
         protected override void _OnGUI(Rect rect, SerializedProperty property, GUIContent label)
@@ -50,11 +49,69 @@ namespace Game.GameEditor
 
             // 绘制标签
             this._editorLayout.LabelField(new GUIContent("时间轴"), labelW, trackH, textColor, trackColor, labelLeftPadding);
+            this._editorLayout.AddAnchorOffset(labelW, 0);
+            // 绘制按钮(上一帧、播放/暂停、下一帧)
+            this._editorLayout.BeginOffset();
+            this._editorLayout.AddAnchorOffset(-120, trackH * 0.3f);
+            const float buttonW = 10;
+            const float buttonPadding = 5;
+            var verlineRect = this._editorLayout.GetRect(1, buttonW);
+            // 上一帧按钮 图标
+            var prevFrameRect = this._editorLayout.GetRect(buttonW, buttonW);
+            this._editorLayout.DrawArrow(prevFrameRect, Color.white, 90);
+            verlineRect.x = prevFrameRect.x;
+            // 上一帧按钮点击事件
+            var hasClickPrevFrame = prevFrameRect.Contains(Event.current.mousePosition) && Event.current.type == EventType.MouseDown;
+            if (hasClickPrevFrame)
+            {
+                var curFrame = Mathf.FloorToInt(time_p.floatValue * frameRate);
+                var newFrame = curFrame - 1;
+                newFrame = Mathf.Clamp(newFrame, 0, Mathf.FloorToInt(length * frameRate));
+                time_p.floatValue = newFrame / (float)frameRate;
+                this._OnTimelineUpdate(property, time_p.floatValue);
+            }
+            this._editorLayout.DrawTextureRect(verlineRect, hasClickPrevFrame ? Color.yellow : Color.white);
+            // 播放/暂停按钮 图标
+            this._editorLayout.AddAnchorOffset(buttonW + buttonPadding, 0);
+            var playRect = this._editorLayout.GetRect(buttonW, buttonW);
+            // 播放/暂停按钮点击事件
+            var hasClickPlay = playRect.Contains(Event.current.mousePosition) && Event.current.type == EventType.MouseDown;
+            var isPlaying_p = property.FindPropertyRelative("isPlaying");
+            if (hasClickPlay) isPlaying_p.boolValue = !isPlaying_p.boolValue;
+            if (isPlaying_p.boolValue)
+            {
+                this._editorLayout.DrawArrow(playRect, GameTimelineGUIConfig.textColor, -90);
+                var deltaTime = this.deltaTime * property.FindPropertyRelative("simulateSpeed").floatValue;
+                var newTime = time_p.floatValue + deltaTime;
+                newTime = newTime % length;
+                time_p.floatValue = newTime;
+                this._OnTimelineUpdate(property, time_p.floatValue);
+            }
+            else
+            {
+                this._editorLayout.DrawArrow(playRect, Color.white, -90);
+            }
+            // 下一帧按钮 图标
+            this._editorLayout.AddAnchorOffset(buttonW + buttonPadding, 0);
+            var nextFrameRect = this._editorLayout.GetRect(buttonW, buttonW);
+            this._editorLayout.DrawArrow(nextFrameRect, Color.white, -90);
+            verlineRect.x = nextFrameRect.x + buttonW;
+            this._editorLayout.DrawTextureRect(verlineRect, Color.white);
+            // 下一帧按钮点击事件
+            var hasClickNextFrame = nextFrameRect.Contains(Event.current.mousePosition) && Event.current.type == EventType.MouseDown;
+            if (hasClickNextFrame)
+            {
+                var curFrame = Mathf.FloorToInt(time_p.floatValue * frameRate);
+                var newFrame = curFrame + 1;
+                newFrame = Mathf.Clamp(newFrame, 0, Mathf.FloorToInt(length * frameRate));
+                time_p.floatValue = newFrame / (float)frameRate;
+                this._OnTimelineUpdate(property, time_p.floatValue);
+            }
+            this._editorLayout.EndOffset();
             // 绘制时间
             var totalFrame = length * frameRate;
             var frame = Mathf.FloorToInt(time_p.floatValue * frameRate);
             var timeStr = $"{frame} / {totalFrame}";
-            this._editorLayout.AddAnchorOffset(labelW, 0);
             this._editorLayout.AddAnchorOffset(-50, 0);
             this._editorLayout.LabelField(new GUIContent(timeStr), 50, trackH, Color.white, transparentColor);
             this._editorLayout.AddAnchorOffset(50, 0);
@@ -67,12 +124,22 @@ namespace Game.GameEditor
             arrowRect.x -= 7.5f;
             arrowRect.y -= 7.5f;
             arrowRect.x += time_p.floatValue / length * trackW;
-            this._editorLayout.DrawArrow(arrowRect, Color.white);
+            this._editorLayout.DrawArrow(arrowRect, Color.white, 180);
             // 箭头拖拽
             OnDragArrowTrack(property);
-
+            // 绘制模拟速度
+            this._editorLayout.AddAnchorOffset(-labelW, 0);
+            this._editorLayout.AddAnchorOffset(0, rowPadding);
+            this._editorLayout.LabelField(new GUIContent("模拟速度"), labelW, trackH, textColor, trackColor, labelLeftPadding);
+            this._editorLayout.AddAnchorOffset(70, 0);
+            var simulateSpeed_p = property.FindPropertyRelative("simulateSpeed");
+            var simulateSpeedRect = this._editorLayout.GetRect(50, trackH);
+            simulateSpeedRect.y -= 2;
+            simulateSpeedRect.height -= 2;
+            simulateSpeed_p.floatValue = Mathf.Clamp(simulateSpeed_p.floatValue, 0.1f, 10f);
+            simulateSpeed_p.floatValue = EditorGUI.FloatField(simulateSpeedRect, simulateSpeed_p.floatValue);
             // 绘制轨道
-            this._editorLayout.AddAnchorOffset(-labelW, rowPadding);
+            this._editorLayout.AddAnchorOffset(0, rowPadding);
             for (int i = 0; i < tracks_p.arraySize; i++)
             {
                 var track_p = tracks_p.GetArrayElementAtIndex(i);

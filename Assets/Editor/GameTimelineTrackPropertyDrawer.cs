@@ -7,28 +7,29 @@ namespace Game.GameEditor
     [CustomPropertyDrawer(typeof(GameTimelineTrack), true)]
     public class GameTimelineTrackPropertyDrawer : GamePropertyDrawer
     {
-        // 常量定义
-        const float trackW = 500;
-        const float trackH = 25;
-        const float fragmentH = 20;
-        const float labelW = 100;
-        const float labelLeftPadding = 5;
-        const float rowPadding = 27;
-        const float fragmentBorderPadding = 4;
-        protected virtual Color trackColor => new Color(42 / 255.0f, 42 / 255.0f, 42 / 255.0f, 1);
-        protected virtual Color trackLabelColor => new Color(0.2f, 0.2f, 0.2f, 1);
-        protected virtual Color textColor => new Color(0.0f, 0.5f, 0.5f);
-        protected virtual Color fragmentColor => new Color(0.5f, 0.5f, 0.5f, 1);
-        protected virtual Color fragmentBorderColor => new Color(0.0f, 0.5f, 0.5f, 1);
+        float labelW => GameTimelineGUIConfig.labelW;
+        float trackW => GameTimelineGUIConfig.trackW;
+        float trackH => GameTimelineGUIConfig.trackH;
+        float rowPadding => GameTimelineGUIConfig.rowHeight;
+        float fragmentH => GameTimelineGUIConfig.fragmentH;
+        float fragmentBorderPadding => GameTimelineGUIConfig.fragmentBorderPadding;
+        Color trackColor => GameTimelineGUIConfig.trackColor;
+        Color fragmentBorderColor => GameTimelineGUIConfig.fragmentBorderColor;
+        Color textColor => GameTimelineGUIConfig.textColor;
+        float labelLeftPadding => GameTimelineGUIConfig.labelLeftPadding;
+        Color trackLabelColor => GameTimelineGUIConfig.trackLabelColor;
+        float bgPadding_Hor => GameTimelineGUIConfig.bgPadding_Hor;
+
+        protected virtual Color fragmentColor => new Color(0.5f, 1f, 0.5f, 0.5f);
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return trackH;
+            return GameTimelineGUIConfig.trackH;
         }
 
         protected override void _OnGUI(Rect rect, SerializedProperty property, GUIContent label)
         {
-            this._editorLayout.AddAnchorOffset(GameTimelinePropertyDrawer.bgPadding_Hor, 0);
+            this._editorLayout.AddAnchorOffset(bgPadding_Hor, 0);
             var trackName = property.FindPropertyRelative("trackName").stringValue;
             this._editorLayout.LabelField(new GUIContent(trackName), labelW, trackH, textColor, trackLabelColor, labelLeftPadding);
             this._editorLayout.AddAnchorOffset(labelW, 0);
@@ -180,8 +181,13 @@ namespace Game.GameEditor
             var newStartTime = startTime + deltaTime;
             var newEndTime = endTime + deltaTime;
 
-            var isOverFlow = newStartTime < 0 || newEndTime > length;
-            if (isOverFlow) return;
+            var isOverflow = newStartTime < 0 || newEndTime > length;
+            if (isOverflow)
+            {
+                var isOverflowDir = newStartTime < 0 && deltaTime < 0 || newEndTime > length && deltaTime > 0;
+                if (isOverflowDir)
+                    return;
+            }
 
             startTime_p.floatValue = newStartTime;
             endTime_p.floatValue = newEndTime;

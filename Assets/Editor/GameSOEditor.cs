@@ -63,50 +63,18 @@ namespace Game.GameEditor
                 var track0 = new GameTimelineTrack_Effect(timeline)
                 {
                     length = animLength,
-                    fragments = new List<GameTimelineTrackFragment>{
-                            new GameTimelineTrackFragment{
-                                startTime = 0.1f,
-                                endTime = 0.1666f,
-                            },
-                            new GameTimelineTrackFragment{
-                                startTime = 0.3333f,
-                                endTime =  0.5f,
-                            },
-                        }
                 };
                 var track1 = new GameTimelineTrack_Action(timeline)
                 {
                     length = animLength,
-                    fragments = new List<GameTimelineTrackFragment>{
-                            new GameTimelineTrackFragment{
-                                startTime = 0.2f,
-                                endTime = 0.3f,
-                            },
-                            new GameTimelineTrackFragment{
-                                startTime = 0.4f,
-                                endTime = 0.5f,
-                            },
-                        }
                 };
                 var track2 = new GameTimelineTrack_TimeScale(timeline)
                 {
                     length = animLength,
-                    fragments = new List<GameTimelineTrackFragment>{
-                            new GameTimelineTrackFragment{
-                                startTime = 0.3f,
-                                endTime = 1.5f,
-                            },
-                        }
                 };
                 var track3 = new GameTimelineTrack_Loop(timeline)
                 {
                     length = animLength,
-                    fragments = new List<GameTimelineTrackFragment>{
-                            new GameTimelineTrackFragment{
-                                startTime = 1.6f,
-                                endTime = 1.9f,
-                            },
-                        }
                 };
                 tracks.Add(track0);
                 tracks.Add(track1);

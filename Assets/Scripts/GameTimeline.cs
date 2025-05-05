@@ -12,5 +12,10 @@ namespace Game.Config
         public float length;
         public float time;
         public int frameRate = 30;
+
+#if UNITY_EDITOR
+        public bool isPlaying = false;
+        public float simulateSpeed = 1.0f;
+#endif
     }
 }
