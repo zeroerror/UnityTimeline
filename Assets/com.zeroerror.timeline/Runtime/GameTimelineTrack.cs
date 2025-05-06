@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-namespace Game.Config
+namespace ZeroError.Config
 {
     [System.Serializable]
     public class GameTimelineTrack

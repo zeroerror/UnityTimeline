@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using Game.Config;
+using ZeroError.Config;
 
-namespace Game.GameEditor
+namespace ZeroError.EditorTool
 {
     [CustomEditor(typeof(GameSampleSO))]
     public class GameSOEditor : Editor
@@ -42,7 +42,7 @@ namespace Game.GameEditor
             this._serializedObject.Update();
             EditorGUILayout.PropertyField(animClip_p);
             EditorGUILayout.PropertyField(timeline_p);
-            if (GUILayout.Button("Create Default"))
+               if (GUILayout.Button("Create Default"))
             {
                 _CreateDefault();
             }
@@ -51,36 +51,34 @@ namespace Game.GameEditor
 
         private void _CreateDefault()
         {
+            var gameSO = (GameSampleSO)target;
+            var animClip = gameSO.animClip;
+            var animLength = animClip != null ? animClip.length : 0;
+            var timeline = gameSO.timeline;
+            timeline.animClip = animClip;
+            timeline.length = animLength;
+            var tracks = new List<GameTimelineTrack>();
+            timeline.tracks = tracks;
+            var track0 = new GameTimelineTrack_Effect(timeline)
             {
-                var gameSO = (GameSampleSO)target;
-                var animClip = gameSO.animClip;
-                var animLength = animClip != null ? animClip.length : 0;
-                var timeline = gameSO.timeline;
-                timeline.animClip = animClip;
-                timeline.length = animLength;
-                var tracks = new List<GameTimelineTrack>();
-                timeline.tracks = tracks;
-                var track0 = new GameTimelineTrack_Effect(timeline)
-                {
-                    length = animLength,
-                };
-                var track1 = new GameTimelineTrack_Action(timeline)
-                {
-                    length = animLength,
-                };
-                var track2 = new GameTimelineTrack_TimeScale(timeline)
-                {
-                    length = animLength,
-                };
-                var track3 = new GameTimelineTrack_Loop(timeline)
-                {
-                    length = animLength,
-                };
-                tracks.Add(track0);
-                tracks.Add(track1);
-                tracks.Add(track2);
-                tracks.Add(track3);
-            }
+                length = animLength,
+            };
+            var track1 = new GameTimelineTrack_Action(timeline)
+            {
+                length = animLength,
+            };
+            var track2 = new GameTimelineTrack_TimeScale(timeline)
+            {
+                length = animLength,
+            };
+            var track3 = new GameTimelineTrack_Loop(timeline)
+            {
+                length = animLength,
+            };
+            tracks.Add(track0);
+            tracks.Add(track1);
+            tracks.Add(track2);
+            tracks.Add(track3);
         }
     }
 }

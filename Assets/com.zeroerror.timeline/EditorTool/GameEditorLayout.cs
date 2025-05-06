@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace Game.GameEditor
+namespace ZeroError.EditorTool
 {
     public class GameEditorLayout
     {

@@ -1,10 +1,10 @@
 using UnityEditor;
 using UnityEngine;
-using Game.Config;
+using ZeroError.Config;
 using UnityEngine.SceneManagement;
 using System.Linq;
 
-namespace Game.GameEditor
+namespace ZeroError.EditorTool
 {
     [CustomPropertyDrawer(typeof(GameTimeline_Skill))]
     public class GameTimelinePropertyDrawer_Skill : GameTimelinePropertyDrawer

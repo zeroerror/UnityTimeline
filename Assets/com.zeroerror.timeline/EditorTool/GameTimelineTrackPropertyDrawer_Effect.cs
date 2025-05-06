@@ -1,8 +1,8 @@
 using UnityEditor;
 using UnityEngine;
-using Game.Config;
+using ZeroError.Config;
 
-namespace Game.GameEditor
+namespace ZeroError.EditorTool
 {
     [CustomPropertyDrawer(typeof(GameTimelineTrack_Effect))]
     public class GameTimelineTrackPropertyDrawer_Effect : GameTimelineTrackPropertyDrawer

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Config
+namespace ZeroError.Config
 {
     public class GameTimelineTrack_Loop : GameTimelineTrack_Skill
     {

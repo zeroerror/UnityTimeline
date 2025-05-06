@@ -1,0 +1,16 @@
+{
+    "name": "EditorToll",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b2d61f04523afcd4eadefbe69a746149"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.GameEditor
+namespace ZeroError.EditorTool
 {
     public static class GameTimelineGUIConfig
     {

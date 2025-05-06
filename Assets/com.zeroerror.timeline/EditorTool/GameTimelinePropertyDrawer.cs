@@ -1,8 +1,8 @@
 using UnityEditor;
 using UnityEngine;
-using Game.Config;
+using ZeroError.Config;
 
-namespace Game.GameEditor
+namespace ZeroError.EditorTool
 {
     [CustomPropertyDrawer(typeof(GameTimeline), true)]
     public class GameTimelinePropertyDrawer : GamePropertyDrawer

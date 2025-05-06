@@ -1,7 +1,7 @@
-using Game.Config;
+using ZeroError.Config;
 using UnityEngine;
 
-namespace Game.Config
+namespace ZeroError.Config
 {
     [CreateAssetMenu(fileName = "GameSampleSO", menuName = "游戏模板SO", order = 1)]
     public class GameSampleSO : ScriptableObject

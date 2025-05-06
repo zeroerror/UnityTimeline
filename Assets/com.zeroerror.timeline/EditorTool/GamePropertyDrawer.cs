@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Game.GameEditor
+namespace ZeroError.EditorTool
 {
     public abstract class GamePropertyDrawer : PropertyDrawer
     {

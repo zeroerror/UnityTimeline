@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Config
+namespace ZeroError.Config
 {
     [System.Serializable]
     public class GameTimeline

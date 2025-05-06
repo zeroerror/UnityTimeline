@@ -1,4 +1,4 @@
-namespace Game.Config
+namespace ZeroError.Config
 {
 
     public class GameTimelineTrack_TimeScale : GameTimelineTrack_Skill

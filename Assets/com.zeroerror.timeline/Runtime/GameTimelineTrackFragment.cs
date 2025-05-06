@@ -1,4 +1,4 @@
-namespace Game.Config
+namespace ZeroError.Config
 {
     [System.Serializable]
     public class GameTimelineTrackFragment
