@@ -155,10 +155,8 @@ namespace ZeroError.EditorTool
 
         protected virtual void OnClickFragment(Rect fragmentRect, SerializedProperty property, SerializedProperty fragment_p, int fragmentIndex)
         {
-            // 基于边界居中片段内部
-            fragmentRect.x += fragmentBorderPadding;
-            fragmentRect.width -= fragmentBorderPadding * 2;
-            fragmentRect.width = Mathf.Max(fragmentRect.width, 0.1f);
+            this._OnClickFragmentDefine(ref fragmentRect);
+
             var eventType = Event.current.type;
             var isMouseDown = eventType == EventType.MouseDown && Event.current.button == 0;
             if (!isMouseDown)
@@ -173,6 +171,12 @@ namespace ZeroError.EditorTool
 
             var selectedTrackIndex = property.FindPropertyRelative("trackIndex").intValue;
             this._OnClickFragment(property, selectedTrackIndex, fragmentIndex);
+        }
+        protected virtual void _OnClickFragmentDefine(ref Rect fragmentRect){
+            // 基于边界居中片段内部
+            fragmentRect.x += fragmentBorderPadding;
+            fragmentRect.width -= fragmentBorderPadding * 2;
+            fragmentRect.width = Mathf.Max(fragmentRect.width, 0.1f);
         }
         protected virtual void _OnClickFragment(SerializedProperty property, int trackIndex, int fragmentIndex) { }
 
