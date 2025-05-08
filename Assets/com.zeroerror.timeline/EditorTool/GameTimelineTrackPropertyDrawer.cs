@@ -132,7 +132,7 @@ namespace ZeroError.EditorTool
                     newFragment_p.FindPropertyRelative("startTime").floatValue = startTime;
                     newFragment_p.FindPropertyRelative("endTime").floatValue = endTime;
                     property.serializedObject.ApplyModifiedProperties();
-                    this._OnFragmentCreate(newFragment_p, clickIndex);
+                    this._OnFragmentCreate(newFragment_p, fragments_p.arraySize - 1);
                 });
             }
 
