@@ -116,7 +116,7 @@ namespace ZeroError.EditorTool
                 {
                     fragments_p.DeleteArrayElementAtIndex(clickIndex);
                     property.serializedObject.ApplyModifiedProperties();
-                    this._OnFragmentCreate(property, clickIndex);
+                    this._OnFragmentDelete(property, clickIndex);
                 });
             }
             else
@@ -132,7 +132,7 @@ namespace ZeroError.EditorTool
                     newFragment_p.FindPropertyRelative("startTime").floatValue = startTime;
                     newFragment_p.FindPropertyRelative("endTime").floatValue = endTime;
                     property.serializedObject.ApplyModifiedProperties();
-                    this._OnFragmentDelete(newFragment_p, clickIndex, startTime, endTime);
+                    this._OnFragmentCreate(newFragment_p, clickIndex, startTime, endTime);
                 });
             }
 
@@ -140,11 +140,11 @@ namespace ZeroError.EditorTool
             Event.current.Use();
         }
 
-        protected virtual void _OnFragmentDelete(SerializedProperty property, int fragmentIndex, float startTime, float endTime)
+        protected virtual void _OnFragmentCreate(SerializedProperty property, int fragmentIndex, float startTime, float endTime)
         {
         }
 
-        protected virtual void _OnFragmentCreate(SerializedProperty fragment_p, int fragmentIndex)
+        protected virtual void _OnFragmentDelete(SerializedProperty fragment_p, int fragmentIndex)
         {
         }
 
