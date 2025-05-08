@@ -19,7 +19,7 @@ namespace ZeroError.EditorTool
         public static readonly float labelLeftPadding = 5;
 
         public const float fragmentH = 20;
-        public const float fragmentBorderPadding = 4;
+        public const float fragmentBorderPadding = 2;
         public static readonly Color fragmentBorderColor = new Color(0.0f, 0.5f, 0.5f, 1);
 
         public static readonly Color bgColor = new Color(25 / 255.0f, 25 / 255.0f, 25 / 255.0f);

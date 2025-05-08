@@ -11,9 +11,5 @@ namespace ZeroError.Config
         public float lastTime;
 
         public List<GameTimelineTrackFragment> fragments;
-
-        public GameTimelineTrack()
-        {
-        }
     }
 }

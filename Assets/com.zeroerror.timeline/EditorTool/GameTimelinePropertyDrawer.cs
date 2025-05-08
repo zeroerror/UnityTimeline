@@ -69,6 +69,7 @@ namespace ZeroError.EditorTool
                 newFrame = Mathf.Clamp(newFrame, 0, Mathf.FloorToInt(length * frameRate));
                 time_p.floatValue = newFrame / (float)frameRate;
                 this._OnTimelineUpdate(property, time_p.floatValue);
+                property.FindPropertyRelative("isPlaying").boolValue = false; // 暂停播放
             }
             this._editorLayout.DrawTextureRect(verlineRect, hasClickPrevFrame ? Color.yellow : Color.white);
             // 播放/暂停按钮 图标
@@ -106,10 +107,11 @@ namespace ZeroError.EditorTool
                 newFrame = Mathf.Clamp(newFrame, 0, Mathf.FloorToInt(length * frameRate));
                 time_p.floatValue = newFrame / (float)frameRate;
                 this._OnTimelineUpdate(property, time_p.floatValue);
+                property.FindPropertyRelative("isPlaying").boolValue = false; // 暂停播放
             }
             this._editorLayout.EndOffset();
             // 绘制时间
-            var totalFrame = length * frameRate;
+            var totalFrame = Mathf.FloorToInt(length * frameRate);
             var frame = Mathf.FloorToInt(time_p.floatValue * frameRate);
             var timeStr = $"{frame} / {totalFrame}";
             this._editorLayout.AddAnchorOffset(-50, 0);

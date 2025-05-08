@@ -21,6 +21,7 @@ namespace ZeroError.EditorTool
         float bgPadding_Hor => GameTimelineGUIConfig.bgPadding_Hor;
 
         protected virtual Color fragmentColor => new Color(0.5f, 1f, 0.5f, 0.5f);
+        protected virtual bool _canStretch => true;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -43,11 +44,13 @@ namespace ZeroError.EditorTool
                 var startTime = fragment_p.FindPropertyRelative("startTime").floatValue;
                 var endTime = fragment_p.FindPropertyRelative("endTime").floatValue;
                 var length = property.FindPropertyRelative("length").floatValue;
-                var x = startTime / length * trackW;
-                var w = (endTime - startTime) / length * trackW;
-                this._editorLayout.AddColumn(trackIndex, x, w, fragmentH, fragmentColor);
-                _OnDragFragment(property, fragment_p, x, w);
-                _OnStretchFragment(property, fragment_p, x, w);
+                var startX = startTime / length * trackW;
+                var fragmentW = (endTime - startTime) / length * trackW;
+                var fragmentRect = new Rect(startX + this._editorLayout.anchorPos.x, this._editorLayout.anchorPos.y, fragmentW, fragmentH);
+                _OnDrawFragment(fragmentRect, property, fragment_p, j, trackIndex, startX, fragmentW);
+                OnClickFragment(fragmentRect, property, fragment_p, j);
+                _OnDragFragment(fragmentRect, property, fragment_p, j);
+                _OnStretchFragment(property, fragment_p, j, startX, fragmentW);
             }
             this._editorLayout.AddAnchorOffset(-labelW, rowPadding);
 
@@ -135,9 +138,41 @@ namespace ZeroError.EditorTool
             Event.current.Use();
         }
 
-        private void _OnDragFragment(SerializedProperty property, SerializedProperty fragment_p, float offsetX, float width)
+        protected virtual void _OnDrawFragment(Rect fragmentRect, SerializedProperty property, SerializedProperty fragment_p, int fragmentIndex, int trackIndex, float startX, float fragmentW)
+        {
+            this._editorLayout.AddColumn(trackIndex, startX, fragmentW, fragmentH, fragmentColor);
+        }
+
+        protected virtual void OnClickFragment(Rect fragmentRect, SerializedProperty property, SerializedProperty fragment_p, int fragmentIndex)
+        {
+            // 基于边界居中片段内部
+            fragmentRect.x += fragmentBorderPadding;
+            fragmentRect.width -= fragmentBorderPadding * 2;
+            fragmentRect.width = Mathf.Max(fragmentRect.width, 0.1f);
+            var eventType = Event.current.type;
+            var isMouseDown = eventType == EventType.MouseDown && Event.current.button == 0;
+            if (!isMouseDown)
+            {
+                return;
+            }
+            var mousePos = Event.current.mousePosition;
+            if (!fragmentRect.Contains(mousePos))
+            {
+                return;
+            }
+
+            var selectedTrackIndex = property.FindPropertyRelative("trackIndex").intValue;
+            this._OnClickFragment(property, selectedTrackIndex, fragmentIndex);
+        }
+        protected virtual void _OnClickFragment(SerializedProperty property, int trackIndex, int fragmentIndex) { }
+
+        private void _OnDragFragment(Rect fragmentRect, SerializedProperty property, SerializedProperty fragment_p, int fragmentIndex)
         {
             if (this._stretchingFragment != null) return;
+
+            // 定义拖拽区域
+            this._OnDragFragmentDefine(ref fragmentRect);
+
             var eventType = Event.current.type;
 
             var isMouseUp = eventType == EventType.MouseUp && Event.current.button == 0;
@@ -156,10 +191,6 @@ namespace ZeroError.EditorTool
             // 锁定当前拖拽片段
             if (this._dragingFragment == null)
             {
-                var fragmentRect = new Rect(offsetX + this._editorLayout.anchorPos.x, this._editorLayout.anchorPos.y, width, fragmentH);
-                fragmentRect.x += fragmentBorderPadding;
-                fragmentRect.width -= fragmentBorderPadding * 2;
-                fragmentRect.width = Mathf.Max(fragmentRect.width, 0.1f);
                 var mousePos = Event.current.mousePosition;
                 if (fragmentRect.Contains(mousePos))
                 {
@@ -193,11 +224,23 @@ namespace ZeroError.EditorTool
             endTime_p.floatValue = newEndTime;
             property.serializedObject.ApplyModifiedProperties();
             Event.current.Use();
+
+            if (startTime != newStartTime || endTime != newEndTime)
+            {
+                this._OnFragmentUpdate(fragment_p, fragmentIndex, startTime_p.floatValue, endTime_p.floatValue);
+            }
+        }
+        protected virtual void _OnDragFragmentDefine(ref Rect fragmentRect)
+        {
+            fragmentRect.x += fragmentBorderPadding;
+            fragmentRect.width -= fragmentBorderPadding * 2;
+            fragmentRect.width = Mathf.Max(fragmentRect.width, 0.1f);
         }
         private SerializedProperty _dragingFragment = null;
 
-        private void _OnStretchFragment(SerializedProperty property, SerializedProperty fragment_p, float offsetX, float width)
+        private void _OnStretchFragment(SerializedProperty property, SerializedProperty fragment_p, int fragmentIndex, float offsetX, float width)
         {
+            if (!this._canStretch) return;
             var fragmentRect_l = new Rect(offsetX + this._editorLayout.anchorPos.x, this._editorLayout.anchorPos.y, fragmentBorderPadding, trackH);
             var fragmentRect_r = new Rect(offsetX + width + this._editorLayout.anchorPos.x - fragmentBorderPadding, this._editorLayout.anchorPos.y, fragmentBorderPadding, trackH);
             this._editorLayout.DrawTextureRect(fragmentRect_l, fragmentBorderColor);
@@ -233,8 +276,11 @@ namespace ZeroError.EditorTool
             var isStretching = isMouseDrag && isTarget;
             var length = property.FindPropertyRelative("length").floatValue;
             var deltaTime = length * Event.current.delta.x / trackW;
+
             var startTime_p = fragment_p.FindPropertyRelative("startTime");
             var endTime_p = fragment_p.FindPropertyRelative("endTime");
+            var oldStartTime = startTime_p.floatValue;
+            var oldEndTime = endTime_p.floatValue;
             switch (this._stretchSide)
             {
                 case 1:
@@ -263,8 +309,16 @@ namespace ZeroError.EditorTool
                 property.serializedObject.ApplyModifiedProperties();
                 Event.current.Use();
             }
+            if (oldStartTime != startTime_p.floatValue || oldEndTime != endTime_p.floatValue)
+            {
+                this._OnFragmentUpdate(fragment_p, fragmentIndex, startTime_p.floatValue, endTime_p.floatValue);
+            }
         }
         private SerializedProperty _stretchingFragment;
         private int _stretchSide;
+
+        protected virtual void _OnFragmentUpdate(SerializedProperty fragment_p, int fragmentIndex, float startTime, float endTime)
+        {
+        }
     }
 }
