@@ -116,6 +116,7 @@ namespace ZeroError.EditorTool
                 {
                     fragments_p.DeleteArrayElementAtIndex(clickIndex);
                     property.serializedObject.ApplyModifiedProperties();
+                    this._OnFragmentCreate(property, clickIndex);
                 });
             }
             else
@@ -131,11 +132,20 @@ namespace ZeroError.EditorTool
                     newFragment_p.FindPropertyRelative("startTime").floatValue = startTime;
                     newFragment_p.FindPropertyRelative("endTime").floatValue = endTime;
                     property.serializedObject.ApplyModifiedProperties();
+                    this._OnFragmentDelete(property, clickIndex, startTime, endTime);
                 });
             }
 
             menu.ShowAsContext();
             Event.current.Use();
+        }
+
+        protected virtual void _OnFragmentDelete(SerializedProperty property, float startTime, float endTime)
+        {
+        }
+
+        protected virtual void _OnFragmentCreate(SerializedProperty property, int fragmentIndex)
+        {
         }
 
         protected virtual void _OnDrawFragment(Rect fragmentRect, SerializedProperty property, SerializedProperty fragment_p, int fragmentIndex, int trackIndex, float startX, float fragmentW)
