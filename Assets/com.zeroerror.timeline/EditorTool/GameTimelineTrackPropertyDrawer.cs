@@ -98,9 +98,11 @@ namespace ZeroError.EditorTool
                 var fragment_p = fragments_p.GetArrayElementAtIndex(j);
                 var startTime = fragment_p.FindPropertyRelative("startTime").floatValue;
                 var endTime = fragment_p.FindPropertyRelative("endTime").floatValue;
-                var x = startTime / length * trackW + rect.x;
-                var w = (endTime - startTime) / length * trackW;
-                if (mousePos.x >= x && mousePos.x <= x + w)
+
+                var fragmentRect = _editorLayout.GetRect((endTime - startTime) / length * trackW, fragmentH);
+                fragmentRect.x += startTime / length * trackW;
+                _OnFragmentRectDefine(ref fragmentRect);
+                if (fragmentRect.Contains(mousePos))
                 {
                     clickFragment = fragment_p;
                     clickIndex = j;
@@ -115,8 +117,8 @@ namespace ZeroError.EditorTool
                 menu.AddItem(new GUIContent("删除片段 " + trackName), false, () =>
                 {
                     fragments_p.DeleteArrayElementAtIndex(clickIndex);
-                    property.serializedObject.ApplyModifiedProperties();
                     this._OnFragmentDelete(property, clickIndex);
+                    property.serializedObject.ApplyModifiedProperties();
                 });
             }
             else
@@ -131,8 +133,8 @@ namespace ZeroError.EditorTool
                     var newFragment_p = fragments_p.GetArrayElementAtIndex(fragments_p.arraySize - 1);
                     newFragment_p.FindPropertyRelative("startTime").floatValue = startTime;
                     newFragment_p.FindPropertyRelative("endTime").floatValue = endTime;
-                    property.serializedObject.ApplyModifiedProperties();
                     this._OnFragmentCreate(newFragment_p, fragments_p.arraySize - 1);
+                    property.serializedObject.ApplyModifiedProperties();
                 });
             }
 
@@ -155,7 +157,7 @@ namespace ZeroError.EditorTool
 
         protected virtual void OnClickFragment(Rect fragmentRect, SerializedProperty property, SerializedProperty fragment_p, int fragmentIndex)
         {
-            this._OnClickFragmentDefine(ref fragmentRect);
+            this._OnFragmentRectDefine(ref fragmentRect);
 
             var eventType = Event.current.type;
             var isMouseDown = eventType == EventType.MouseDown && Event.current.button == 0;
@@ -172,20 +174,22 @@ namespace ZeroError.EditorTool
             var selectedTrackIndex = property.FindPropertyRelative("trackIndex").intValue;
             this._OnClickFragment(property, selectedTrackIndex, fragmentIndex);
         }
-        protected virtual void _OnClickFragmentDefine(ref Rect fragmentRect){
-            // 基于边界居中片段内部
+
+        protected virtual void _OnClickFragment(SerializedProperty property, int trackIndex, int fragmentIndex) { }
+
+        protected virtual void _OnFragmentRectDefine(ref Rect fragmentRect)
+        {
             fragmentRect.x += fragmentBorderPadding;
             fragmentRect.width -= fragmentBorderPadding * 2;
             fragmentRect.width = Mathf.Max(fragmentRect.width, 0.1f);
         }
-        protected virtual void _OnClickFragment(SerializedProperty property, int trackIndex, int fragmentIndex) { }
 
         private void _OnDragFragment(Rect fragmentRect, SerializedProperty property, SerializedProperty fragment_p, int fragmentIndex)
         {
             if (this._stretchingFragment != null) return;
 
             // 定义拖拽区域
-            this._OnDragFragmentDefine(ref fragmentRect);
+            this._OnFragmentRectDefine(ref fragmentRect);
 
             var eventType = Event.current.type;
 
@@ -243,12 +247,6 @@ namespace ZeroError.EditorTool
             {
                 this._OnFragmentUpdate(fragment_p, fragmentIndex, startTime_p.floatValue, endTime_p.floatValue);
             }
-        }
-        protected virtual void _OnDragFragmentDefine(ref Rect fragmentRect)
-        {
-            fragmentRect.x += fragmentBorderPadding;
-            fragmentRect.width -= fragmentBorderPadding * 2;
-            fragmentRect.width = Mathf.Max(fragmentRect.width, 0.1f);
         }
         private SerializedProperty _dragingFragment = null;
 
@@ -323,6 +321,10 @@ namespace ZeroError.EditorTool
                 property.serializedObject.ApplyModifiedProperties();
                 Event.current.Use();
             }
+            var currentStartTime = startTime_p.floatValue;
+            var currentEndTime = endTime_p.floatValue;
+            if (currentStartTime > currentEndTime) startTime_p.floatValue = currentEndTime;
+
             if (oldStartTime != startTime_p.floatValue || oldEndTime != endTime_p.floatValue)
             {
                 this._OnFragmentUpdate(fragment_p, fragmentIndex, startTime_p.floatValue, endTime_p.floatValue);

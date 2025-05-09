@@ -52,5 +52,6 @@
         "Temp/": true
     },
     "dotnet.defaultSolution": "UnityTimeline.sln",
-    "dotnetAcquisitionExtension.sharedExistingDotnetPath": "C:\\Program Files\\dotnet\\dotnet.exe"
+    "dotnetAcquisitionExtension.sharedExistingDotnetPath": "C:\\Program Files\\dotnet\\dotnet.exe",
+    "dotnet.preferCSharpExtension": true
 }
