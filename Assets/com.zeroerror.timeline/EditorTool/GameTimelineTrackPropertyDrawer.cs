@@ -240,13 +240,14 @@ namespace ZeroError.EditorTool
 
             startTime_p.floatValue = newStartTime;
             endTime_p.floatValue = newEndTime;
-            property.serializedObject.ApplyModifiedProperties();
             Event.current.Use();
 
             if (startTime != newStartTime || endTime != newEndTime)
             {
                 this._OnFragmentUpdate(fragment_p, fragmentIndex, startTime_p.floatValue, endTime_p.floatValue);
             }
+
+            property.serializedObject.ApplyModifiedProperties();
         }
         private SerializedProperty _dragingFragment = null;
 
